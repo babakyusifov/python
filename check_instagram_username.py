@@ -1,7 +1,6 @@
 import aiohttp
 import asyncio
 
-# Username yoxlama funksiyası
 async def check_username(username):
     url = f"https://www.instagram.com/{username}/"
 
@@ -16,20 +15,16 @@ async def check_username(username):
     async with aiohttp.ClientSession() as session:
         try:
             async with session.get(url, headers=headers) as response:
-                if response.status == 404:
+                html = await response.text()
+
+                # HTML içindən səhifənin olub-olmadığını müəyyən edirik
+                if "Sorry, this page isn't available" in html:
                     print(f"❌ Username '{username}' mövcud deyil.")
-                elif response.status == 200:
-                    print(f"✅ Username '{username}' artıq istifadə olunur.")
-                elif response.status == 403:
-                    print("⚠️  Instagram sorğunu blokladı (403 Forbidden).")
-                elif response.status == 429:
-                    print("⚠️  Çox sayda sorğu göndərildi (429 Too Many Requests). Zəhmət olmasa gözləyin.")
                 else:
-                    print(f"⚠️  Naməlum cavab: {response.status}")
+                    print(f"✅ Username '{username}' artıq istifadə olunur.")
         except aiohttp.ClientError as e:
             print(f"🌐 Şəbəkə xətası: {e}")
 
-# Əsas proqram dövrü
 async def main():
     while True:
         username = input("🔍 Yoxlamaq istədiyiniz Instagram username-i daxil edin (çıxmaq üçün 'exit'): ")
@@ -42,8 +37,7 @@ async def main():
             continue
 
         await check_username(username)
-        await asyncio.sleep(1)  # Serverə yük salmamaq üçün gözləmə
+        await asyncio.sleep(1)
 
-# Proqram başlanğıcı
 if __name__ == "__main__":
     asyncio.run(main())
