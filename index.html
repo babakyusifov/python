@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,8 +70,10 @@
                 return;
             }
 
-            // FastAPI backend-ə AJAX sorğusu göndəririk
-            fetch(`http://127.0.0.1:8000/check_username/${username}`)
+            // Dinamik backend URL (həm ngrok, həm də GitHub Codespaces üçün işləyir)
+            const baseUrl = window.location.origin;
+
+            fetch(`${baseUrl}/check_username/${username}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "found") {
