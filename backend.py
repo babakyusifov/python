@@ -1,8 +1,20 @@
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+import os
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import aiohttp
 
 app = FastAPI()
+
+# Statik fayllar üçün qovluğu qeyd edirik
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# index.html faylını kök route (/)-da göstəririk
+@app.get("/", response_class=HTMLResponse)
+async def serve_home():
+    with open("static/index.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 # Instagram username yoxlama funksiyası
 async def check_username(username: str):
