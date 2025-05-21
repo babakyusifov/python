@@ -15,9 +15,10 @@ async def check_username(username):
     async with aiohttp.ClientSession() as session:
         try:
             async with session.get(url, headers=headers) as response:
+                # HTML cavabını əldə edirik
                 html = await response.text()
 
-                # HTML içindən səhifənin olub-olmadığını müəyyən edirik
+                # Əgər səhifə mövcud deyilsə, "Sorry, this page isn't available" mətni olacaq
                 if "Sorry, this page isn't available" in html:
                     print(f"❌ Username '{username}' mövcud deyil.")
                 else:
@@ -33,7 +34,7 @@ async def main():
             break
 
         if not username.strip():
-            print("⚠️  Username boş ola bilməz.")
+            print("⚠️ Username boş ola bilməz.")
             continue
 
         await check_username(username)
